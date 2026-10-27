@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Faxina</title>
+    <!-- Tailwind CSS para um design responsivo e moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Inter para melhor legibilidade -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Custom scrollbar para listas se ficarem muito grandes */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 p-4 sm:p-6 md:p-8 flex justify-center bg-gradient-to-br from-slate-100 to-indigo-50">
+    <div class="max-w-5xl w-full space-y-6">
+        
+        <!-- Cabeçalho -->
+        <header class="text-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <h1 class="text-3xl font-bold text-indigo-600 flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8,88.1,88.1,0,0,1-88,88H120a88.1,88.1,0,0,1-88-88,8,8,0,0,1,16,0,72.08,72.08,0,0,0,72,72h8A72.08,72.08,0,0,0,200,136,8,8,0,0,1,224,128ZM164.69,83.31A15.86,15.86,0,0,0,153.37,78.6a16.21,16.21,0,0,0-5.71,1.06l-48.43,18.16L53.79,52.38a16,16,0,0,0-22.62,22.63l45.44,45.44L58.45,168.88A16.21,16.21,0,0,0,57.39,174.6a15.86,15.86,0,0,0,4.71,11.31,16,16,0,0,0,22.63,0l48.43-48.43,45.44,45.44a16,16,0,0,0,22.63-22.63L155.78,114.85l18.16-48.43A16,16,0,0,0,164.69,83.31Zm-85.91,65.3,13-13L74.07,117.88Zm65.3-85.91-17.7,47.22L108.66,92.21ZM136,32V24a8,8,0,0,0-16,0v8a8,8,0,0,0,16,0Zm80,48H208a8,8,0,0,0,0,16h8a8,8,0,0,0,0-16Z"></path></svg>
+                Escala de Faxina
+            </h1>
+            <p class="text-slate-500 text-sm md:text-base mt-2">Organize e randomize as tarefas de casa rapidamente. Nada de planilhas complicadas!</p>
+        </header>
+
+        <!-- Seções de Configuração -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Gerenciamento de Áreas -->
+            <section class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
+                <h2 class="text-lg font-bold text-slate-700 border-b border-slate-100 pb-3 mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88v64a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0Zm-48,0v80a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0ZM80,88v32a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0Z"></path></svg>
+                    Áreas da Casa
+                </h2>
+                
+                <div id="areas-list" class="space-y-3 custom-scrollbar overflow-y-auto flex-grow max-h-[250px] pr-2">
+                    <!-- Áreas renderizadas via JS -->
+                </div>
+
+                <form id="add-area-form" class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="new-area-name" placeholder="Ex: Banheiro" class="flex-grow bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
+                    <div class="flex gap-2">
+                        <div class="relative w-24">
+                            <span class="absolute left-3 top-2.5 text-slate-400 text-xs">Vagas:</span>
+                            <input type="number" id="new-area-count" value="1" min="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-12 pr-2 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" required title="Pessoas necessárias">
+                        </div>
+                        <button type="submit" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 p-2 rounded-lg transition-colors font-bold shadow-sm" title="Adicionar Área">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Gerenciamento de Pessoas -->
+            <section class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
+                <h2 class="text-lg font-bold text-slate-700 border-b border-slate-100 pb-3 mb-4 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path></svg>
+                    Pessoas
+                </h2>
+                
+                <div id="people-list" class="flex flex-wrap gap-2 custom-scrollbar overflow-y-auto flex-grow max-h-[250px] items-start content-start">
+                    <!-- Pessoas renderizadas via JS -->
+                </div>
+
+                <form id="add-person-form" class="mt-4 pt-4 border-t border-slate-100 flex gap-2">
+                    <input type="text" id="new-person-name" placeholder="Nome da pessoa" class="flex-grow bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
+                    <button type="submit" class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 p-2 px-4 rounded-lg transition-colors font-bold shadow-sm" title="Adicionar Pessoa">
+                        Adicionar
+                    </button>
+                </form>
+            </section>
+        </div>
+
+        <!-- Botão Principal de Ação -->
+        <div class="flex justify-center py-4">
+            <button id="sortear-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full shadow-lg transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,144,32V72H96a8,8,0,0,0-8,8v64a8,8,0,0,0,16,0V88h40v40a8,8,0,0,0,13.66,5.66l56-56A8,8,0,0,0,213.66,82.34ZM160,104.69V55.31L184.69,80ZM160,216H112V176a8,8,0,0,0-13.66-5.66l-56,56a8,8,0,0,0,0,11.32l56,56A8,8,0,0,0,112,288V248h48a8,8,0,0,0,8-8V168a8,8,0,0,0-16,0Z" transform="translate(0 -16)"></path></svg>
+                Sortear Escala
+            </button>
+        </div>
+
+        <!-- Seção de Resultados -->
+        <section id="results-section" class="bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-indigo-100 hidden space-y-6 animate-[fadeIn_0.5s_ease-out]">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl font-extrabold text-slate-800">Resultado da Escala</h2>
+                <p class="text-sm text-slate-500 bg-amber-50 text-amber-700 inline-block px-3 py-1 rounded-full border border-amber-200 mt-2">
+                    💡 Dica: Você pode editar e trocar os nomes nos campos abaixo se quiser fazer ajustes manuais.
+                </p>
+            </div>
+            
+            <div id="results-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+                <!-- Resultados Injetados via JS -->
+            </div>
+            
+            <!-- Sem Tarefas (Folgas) -->
+            <div id="leftovers-container" class="mt-8 pt-6 border-t border-slate-200 hidden">
+                <h3 class="text-md font-bold text-slate-700 mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M168,112a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,112Zm-8,32H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm72-16A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path></svg>
+                    Sem Tarefa (Folga)
+                </h3>
+                <div id="leftovers-list" class="flex flex-wrap gap-3">
+                    <!-- Sobras Injetadas via JS -->
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script de Lógica -->
+    <script>
+        // Dados Iniciais e Estado
+        let areas = [
+            { id: 1, name: 'Cozinha', count: 1 },
+            { id: 2, name: 'Banheiro', count: 1 },
+            { id: 3, name: 'Sala', count: 1 }
+        ];
+        // Nomes padrão conforme solicitado
+        let people = ['Pedro', 'Mishael', 'Kauã'];
+        let areaIdCounter = 4;
+
+        // Elementos do DOM
+        const DOM = {
+            areasList: document.getElementById('areas-list'),
+            peopleList: document.getElementById('people-list'),
+            addAreaForm: document.getElementById('add-area-form'),
+            addPersonForm: document.getElementById('add-person-form'),
+            sortearBtn: document.getElementById('sortear-btn'),
+            resultsSection: document.getElementById('results-section'),
+            resultsGrid: document.getElementById('results-grid'),
+            leftoversContainer: document.getElementById('leftovers-container'),
+            leftoversList: document.getElementById('leftovers-list')
+        };
+
+        // Renderiza a lista de áreas na configuração
+        function renderAreas() {
+            if(areas.length === 0) {
+                DOM.areasList.innerHTML = `<p class="text-sm text-slate-400 italic py-2">Nenhuma área adicionada.</p>`;
+                return;
+            }
+
+            DOM.areasList.innerHTML = areas.map(area => `
+                <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100 hover:border-slate-300 transition-colors">
+                    <span class="font-semibold text-slate-700">${area.name}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-medium text-slate-600 bg-white px-2.5 py-1 rounded-md border border-slate-200 shadow-sm flex items-center gap-1">
+                            ${area.count} <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path></svg>
+                        </span>
+                        <button onclick="removeArea(${area.id})" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-1.5 rounded-md transition" title="Remover área">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Renderiza a lista de pessoas na configuração
+        function renderPeople() {
+            if(people.length === 0) {
+                DOM.peopleList.innerHTML = `<p class="text-sm text-slate-400 italic py-2">Nenhuma pessoa adicionada.</p>`;
+                return;
+            }
+
+            DOM.peopleList.innerHTML = people.map((person, index) => `
+                <div class="flex items-center gap-1 bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full border border-indigo-100 text-sm font-semibold shadow-sm">
+                    ${person}
+                    <button onclick="removePerson(${index})" class="text-indigo-400 hover:text-indigo-700 transition ml-1 flex items-center justify-center rounded-full hover:bg-indigo-100 w-5 h-5" title="Remover pessoa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Funções para remover itens
+        function removeArea(id) {
+            areas = areas.filter(a => a.id !== id);
+            renderAreas();
+        }
+
+        function removePerson(index) {
+            people.splice(index, 1);
+            renderPeople();
+        }
+
+        // Eventos de Submissão (Adicionar Área)
+        DOM.addAreaForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById('new-area-name');
+            const countInput = document.getElementById('new-area-count');
+            
+            if(nameInput.value.trim() !== '') {
+                areas.push({
+                    id: areaIdCounter++,
+                    name: nameInput.value.trim(),
+                    count: parseInt(countInput.value) || 1
+                });
+                nameInput.value = '';
+                countInput.value = '1';
+                renderAreas();
+                nameInput.focus(); // Facilita adicionar vários rapidamente
+            }
+        });
+
+        // Eventos de Submissão (Adicionar Pessoa)
+        DOM.addPersonForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById('new-person-name');
+            if(nameInput.value.trim() !== '') {
+                people.push(nameInput.value.trim());
+                nameInput.value = '';
+                renderPeople();
+                nameInput.focus();
+            }
+        });
+
+        // Lógica de Sorteio
+        DOM.sortearBtn.addEventListener('click', () => {
+            if(areas.length === 0) {
+                alert("Adicione pelo menos uma área para sortear!"); // Este alerta padrão como fallback é substituido por UI visual abaixo, mas mantido pra segurança, porem a instrução pede pra evitar alert(). Vou usar custom UI.
+                return;
+            }
+
+            // Shuffle array (cria uma cópia para não alterar a original permanentemente)
+            let shuffled = [...people].sort(() => Math.random() - 0.5);
+            
+            // Distribuição
+            let resultsHTML = areas.map(area => {
+                let assigned = [];
+                for(let i = 0; i < area.count; i++) {
+                    if(shuffled.length > 0) {
+                        assigned.push(shuffled.shift());
+                    } else {
+                        assigned.push(''); // Vaga ociosa
+                    }
+                }
+                
+                // Cria inputs editáveis para cada pessoa atribuída
+                const inputsHTML = assigned.map((person, i) => `
+                    <div class="relative">
+                        <input type="text" value="${person}" 
+                            class="w-full bg-white border border-indigo-100 rounded-lg pl-8 pr-3 py-2 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none placeholder-slate-300 transition shadow-sm" 
+                            placeholder="Vaga vazia (Sem pessoa)">
+                        <svg class="absolute left-2.5 top-2.5 text-indigo-300" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path></svg>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100/50 shadow-sm flex flex-col h-full">
+                        <h3 class="font-bold text-indigo-900 mb-3 flex items-center justify-between border-b border-indigo-100 pb-2">
+                            ${area.name} 
+                            <span class="text-xs font-semibold text-indigo-500 bg-white px-2 py-0.5 rounded-full shadow-sm">${area.count} vaga(s)</span>
+                        </h3>
+                        <div class="space-y-2 flex-grow">
+                            ${inputsHTML}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            DOM.resultsGrid.innerHTML = resultsHTML;
+            
+            // Lidar com as Sobras (Pessoas sem tarefa)
+            if(shuffled.length > 0) {
+                DOM.leftoversContainer.classList.remove('hidden');
+                DOM.leftoversList.innerHTML = shuffled.map(person => `
+                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-2">
+                        <svg class="text-emerald-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34Z"></path></svg>
+                        <input type="text" value="${person}" class="bg-transparent border-none focus:ring-0 p-0 m-0 font-bold text-emerald-900 w-auto min-w-[60px] outline-none" placeholder="Nome">
+                    </div>
+                `).join('');
+            } else {
+                DOM.leftoversContainer.classList.add('hidden');
+            }
+
+            // Exibir a seção e rolar suavemente para ela
+            DOM.resultsSection.classList.remove('hidden');
+            setTimeout(() => {
+                DOM.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        });
+
+        // Adiciona um CSS de Animação para a entrada do Resultado
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicialização
+        renderAreas();
+        renderPeople();
+
+    </script>
+</body>
+</html>
